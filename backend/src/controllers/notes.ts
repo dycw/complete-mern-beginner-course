@@ -4,6 +4,7 @@ import createHttpError from "http-errors";
 import { isValidObjectId } from "mongoose";
 
 export const getNotes: RequestHandler = async (_req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
   try {
     const notes = await NoteModel.find().exec();
     res.status(200).json(notes);
@@ -13,6 +14,7 @@ export const getNotes: RequestHandler = async (_req, res, next) => {
 };
 
 export const getNote: RequestHandler = async (req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
   const noteId = req.params.noteId;
   try {
     if (!isValidObjectId(noteId)) {
@@ -39,6 +41,7 @@ export const createNote: RequestHandler<
   CreateNoteBody,
   unknown
 > = async (req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
   const title = req.body.title;
   const text = req.body.text;
   try {
@@ -67,6 +70,7 @@ export const updateNote: RequestHandler<
   UpdateNoteBody,
   unknown
 > = async (req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
   const noteId = req.params.noteId;
   const newTitle = req.body.title;
   const newText = req.body.text;
@@ -91,6 +95,7 @@ export const updateNote: RequestHandler<
 };
 
 export const deleteNote: RequestHandler = async (req, res, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
   const noteId = req.params.noteId;
   try {
     if (!isValidObjectId(noteId)) {

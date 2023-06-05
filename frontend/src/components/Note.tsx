@@ -36,7 +36,7 @@ export default function Note({
           {title}
           <MdDelete
             className="text-muted ms-auto"
-            onClick={(e) => {
+            onClick={(e: Event) => {
               onDeleteNoteClicked(note);
               e.stopPropagation();
             }}

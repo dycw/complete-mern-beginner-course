@@ -69,7 +69,7 @@ export default function App() {
         <AddEditNoteDialog
           noteToEdit={noteToEdit}
           onDismiss={() => setNoteToEdit(null)}
-          onNoteSaved={(updatedNote) => {
+          onNoteSaved={(updatedNote: NoteModel) => {
             setNotes(
               notes.map((existingNote) =>
                 existingNote._id === updatedNote._id
