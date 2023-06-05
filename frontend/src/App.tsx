@@ -1,6 +1,8 @@
-import NoteComponent from "./components/Note";
+import Note from "./components/Note";
 import { Note as NoteModel } from "./models/note";
+import styles from "./styles/NotesPage.module.css";
 import { useEffect, useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 
 export default function App() {
   const [notes, setNotes] = useState<NoteModel[]>([]);
@@ -22,10 +24,14 @@ export default function App() {
   }, []);
 
   return (
-    <div>
-      {notes.map((note) => (
-        <NoteComponent key={note._id} note={note} />
-      ))}
-    </div>
+    <Container>
+      <Row xs={1} md={2} xl={3} className="g-4">
+        {notes.map((note) => (
+          <Col key={note._id}>
+            <Note note={note} className={styles.note} />
+          </Col>
+        ))}
+      </Row>
+    </Container>
   );
 }
