@@ -1,22 +1,38 @@
 import { Note } from "../models/note";
-import { NoteInput, createNote } from "../network/notes_api";
+import { NoteInput, createNote, updateNote } from "../network/notes_api";
 import { Button, Modal, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 type Props = {
+  noteToEdit?: Note;
   onDismiss: () => void;
   onNoteSaved: (note: Note) => void;
 };
 
-export default function AddNoteDialog({ onDismiss, onNoteSaved }: Props) {
+export default function AddEditNoteDialog({
+  noteToEdit,
+  onDismiss,
+  onNoteSaved,
+}: Props) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<NoteInput>();
+  } = useForm<NoteInput>({
+    defaultValues: {
+      title: noteToEdit?.title || "",
+      text: noteToEdit?.text || "",
+    },
+  });
+
   async function onSubmit(input: NoteInput) {
     try {
-      const note = await createNote(input);
+      let note: Note;
+      if (noteToEdit) {
+        note = await updateNote(noteToEdit._id, input);
+      } else {
+        note = await createNote(input);
+      }
       onNoteSaved(note);
     } catch (error) {
       console.error(error);
@@ -26,10 +42,10 @@ export default function AddNoteDialog({ onDismiss, onNoteSaved }: Props) {
   return (
     <Modal show onHide={onDismiss}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Note</Modal.Title>
+        <Modal.Title>{noteToEdit ? "Edit note" : "Add note"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form id="addNoteForm" onSubmit={handleSubmit(onSubmit)}>
+        <Form id="addEditNoteForm" onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3">
             <Form.Label>Title</Form.Label>
             <Form.Control
@@ -54,7 +70,7 @@ export default function AddNoteDialog({ onDismiss, onNoteSaved }: Props) {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button type="submit" form="addNoteForm" disabled={isSubmitting}>
+        <Button type="submit" form="addEditNoteForm" disabled={isSubmitting}>
           Save
         </Button>
       </Modal.Footer>
