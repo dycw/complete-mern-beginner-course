@@ -1,10 +1,13 @@
 import notesRouter from "./routes/notes";
+import cors from "cors";
 import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
 import createHttpError, { isHttpError } from "http-errors";
 import morgan from "morgan";
 
 const app = express();
+
+app.use(cors());
 
 app.use(morgan("dev"));
 
