@@ -1,3 +1,4 @@
+import { requiresAuth } from "./middleware/auth";
 import notesRouter from "./routes/notes";
 import usersRouter from "./routes/users";
 import env from "./util/validateEnv";
@@ -31,8 +32,8 @@ app.use(
   })
 );
 
-app.use("/api/notes", notesRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/notes", requiresAuth, notesRouter);
 
 app.use((_req, _res, next) => {
   next(createHttpError(404, "Endpoint not found"));
